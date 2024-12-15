@@ -28,7 +28,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION	"1.8.0"
+#define PLUGIN_VERSION	"1.0.0"
 
 enum
 {
@@ -65,8 +65,8 @@ bool g_bIsFalling[MAXPLAYERS + 1];
 
 public Plugin myinfo =
 {
-	name = "[TF2] Simple Bunnyhop with duck jump thing",
-	author = "Mikusch and Suado Cowboy",
+	name = "[TF2] Simple Bunnyhop with duck jump throws you back up",
+	author = "Mikusch and modified by Suado Cowboy",
 	description = "Simple TF2 bunnyhopping plugin made by Mikusch and modified by Suado Cowboy",
 	version = PLUGIN_VERSION,
 	url = "https://github.com/SuadoCowboy/TF2-Bhop-with-Duck-Jump-Thing"
