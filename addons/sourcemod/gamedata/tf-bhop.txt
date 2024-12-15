@@ -1,0 +1,95 @@
+/*
+ * Copyright (C) 2021  Mikusch
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+"Games"
+{
+	"tf"
+	{
+		"Keys"
+		{
+			"Platform"
+			{
+				"linux"		"linux"
+				"linux64"	"linux"
+				"windows"	"windows"
+				"windows64"	"windows"
+			}
+		}
+		"Signatures"
+		{
+			// "set_scout_doublejump_disabled"
+			"CTFPlayer::CanAirDash"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK9CTFPlayer10CanAirDashEv"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x08\x53\x57\x8B\xF9\x8B\x87\xB4\x1B\x00\x00"
+			}
+			// "BumperCar.Jump"
+			"CTFGameMovement::CheckJumpButton"
+			{
+				"library"	"server"
+				"linux"		"@_ZN15CTFGameMovement15CheckJumpButtonEv"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x53\x56\x57\x8B\xF9\x8B\x4F\x04"
+			}
+			"CTFGameMovement::PreventBunnyJumping"
+			{
+				"library"	"server"
+				"linux"		"@_ZN15CTFGameMovement19PreventBunnyJumpingEv"
+				// Windows inlines this function
+			}
+		}
+		"MemPatches"
+		{
+			"CTFGameMovement::CheckJumpButton::AllowDuckJumping"
+			{
+				"signature"	"CTFGameMovement::CheckJumpButton"
+				"linux"
+				{
+					"offset"	"D3h"
+					"verify"	"\x74" // jz
+					"patch"		"\xEB" // jmp
+				}
+				"windows"
+				{
+					"offset"	"38Eh"
+					"verify"	"\x74" // jz
+					"patch"		"\xEB" // jmp
+				}
+			}
+			"CTFGameMovement::PreventBunnyJumping::AllowBunnyJumping_Linux"
+			{
+				"signature"	"CTFGameMovement::PreventBunnyJumping"
+				"linux"
+				{
+					"offset"	"22h"
+					"verify"	"\x75" // jnz
+					"patch"		"\xEB" // jmp
+				}
+			}
+			"CTFGameMovement::PreventBunnyJumping::AllowBunnyJumping_Windows"
+			{
+				"signature"	"CTFGameMovement::CheckJumpButton"
+				"windows"
+				{
+					"offset"	"42Bh"
+					"verify"	"\x75" // jnz
+					"patch"		"\xEB" // jmp
+				}
+			}
+		}
+	}
+}
